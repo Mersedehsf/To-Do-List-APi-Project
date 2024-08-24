@@ -1,6 +1,7 @@
 package com.example.ToDoList.service;
 
 import com.example.ToDoList.model.AbstractEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -10,6 +11,7 @@ import java.util.Optional;
 public abstract class AbstractService<E extends AbstractEntity, R extends JpaRepository<E, Integer>> {
 
     //todo is it the right place to handle exceptions?
+    @Autowired
     protected R repository;
 
     public void create(E entity) {
