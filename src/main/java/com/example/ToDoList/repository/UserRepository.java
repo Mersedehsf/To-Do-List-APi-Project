@@ -8,4 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Repository
 public interface UserRepository extends JpaRepository<UserAuthenticationEntity,Integer> {
 
+    UserAuthenticationEntity findByName(String name);
+
 }

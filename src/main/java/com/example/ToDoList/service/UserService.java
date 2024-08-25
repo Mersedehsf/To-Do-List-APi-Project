@@ -11,12 +11,20 @@ import java.util.Optional;
 @Service
 public class UserService extends AbstractService<UserAuthenticationEntity, UserRepository>{
 
-//todo email validator regex
     @Override
     public void create(UserAuthenticationEntity userAuthenticationEntity){
         userAuthenticationEntity.setPassword(ApplicationConfig.passwordEncoder().encode(userAuthenticationEntity.getPassword()));
         repository.save(userAuthenticationEntity);
     }
+
+    public Optional<UserAuthenticationEntity> findByName(String name) throws Exception {
+        try {
+            return Optional.ofNullable(repository.findByName(name));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 
 
