@@ -1,6 +1,7 @@
 package com.example.ToDoList.model;
 
 
+import com.example.ToDoList.model.entity.AbstractEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -26,8 +27,8 @@ public class UserAuthenticationEntity extends AbstractEntity {
     @Email
     private String email;
 
-    @Column(name = "password",nullable = false,length = 20)
-    @Size(min = 10, max = 20)
+    //todo a proper regex for password
+    @Column(name = "password",nullable = false,length = 6)
     private String password;
 
 }

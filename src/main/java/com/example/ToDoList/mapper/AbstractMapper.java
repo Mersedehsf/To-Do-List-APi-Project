@@ -1,6 +1,6 @@
 package com.example.ToDoList.mapper;
 
-import com.example.ToDoList.model.AbstractEntity;
+import com.example.ToDoList.model.entity.AbstractEntity;
 import org.mapstruct.MapperConfig;
 import org.mapstruct.MappingInheritanceStrategy;
 

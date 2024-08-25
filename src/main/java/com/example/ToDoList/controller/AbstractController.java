@@ -1,7 +1,7 @@
 package com.example.ToDoList.controller;
 
 import com.example.ToDoList.mapper.AbstractMapper;
-import com.example.ToDoList.model.AbstractEntity;
+import com.example.ToDoList.model.entity.AbstractEntity;
 import com.example.ToDoList.model.dto.BaseDto;
 import com.example.ToDoList.service.AbstractService;
 import org.springframework.beans.factory.annotation.Autowired;

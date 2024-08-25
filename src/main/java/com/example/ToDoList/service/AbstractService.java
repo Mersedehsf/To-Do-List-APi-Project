@@ -1,6 +1,6 @@
 package com.example.ToDoList.service;
 
-import com.example.ToDoList.model.AbstractEntity;
+import com.example.ToDoList.model.entity.AbstractEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.jpa.repository.JpaRepository;
