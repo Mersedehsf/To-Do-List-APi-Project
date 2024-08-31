@@ -23,12 +23,10 @@ public class UserAuthenticationEntity extends AbstractEntity {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "email",unique = true)
-    @Email
+    @Column(name = "email", unique = true)
     private String email;
 
-    //todo a proper regex for password
-    @Column(name = "password",nullable = false,length = 6)
+    @Column(name = "password")
     private String password;
 
 }

@@ -4,6 +4,7 @@ package com.example.ToDoList.controller;
 import com.example.ToDoList.model.UserAuthenticationEntity;
 import com.example.ToDoList.model.dto.UserDto;
 import com.example.ToDoList.service.UserService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,8 +15,8 @@ import org.springframework.web.bind.annotation.*;
 public class UserController extends AbstractController<UserAuthenticationEntity, UserDto, UserService>{
 
 
-    @PostMapping("/create")
-    public void create(@RequestBody UserDto userDto){
+    @PostMapping("/register")
+    public void register(@RequestBody @Valid UserDto userDto){
         service.create(mapper.dtoToEntity(userDto));
     }
 
@@ -35,6 +36,7 @@ public class UserController extends AbstractController<UserAuthenticationEntity,
     public void delete(@PathVariable("id") Integer id){
         service.delete(id);
     }
+
 
 
 }

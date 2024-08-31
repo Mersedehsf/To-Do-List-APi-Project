@@ -1,6 +1,11 @@
 package com.example.ToDoList.model.dto;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Email;
+
+import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 
 @Data
@@ -8,9 +13,15 @@ import lombok.*;
 @AllArgsConstructor
 public class UserDto extends BaseDto{
 
+    // todo unique email
+    @NotNull(message = "Name cannot be null")
     private String name;
 
+    @NotNull(message = "Email cannot be null")
+    @Email(message = "Invalid email format")
     private String email;
 
+    @NotNull(message = "password cannot be null")
+    @Length(min = 4,max = 10,message = "Password must be between 4 and 15 characters")
     private String password;
 }
