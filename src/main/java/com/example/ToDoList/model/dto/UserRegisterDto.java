@@ -3,7 +3,6 @@ package com.example.ToDoList.model.dto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Email;
 
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -11,9 +10,8 @@ import org.hibernate.validator.constraints.Length;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto extends BaseDto{
+public class UserRegisterDto extends BaseDto{
 
-    // todo unique email
     @NotNull(message = "Name cannot be null")
     private String name;
 

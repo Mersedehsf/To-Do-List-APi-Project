@@ -1,8 +1,8 @@
 package com.example.ToDoList.controller;
 
 
-import com.example.ToDoList.model.UserAuthenticationEntity;
-import com.example.ToDoList.model.dto.UserDto;
+import com.example.ToDoList.model.entity.UserAuthenticationEntity;
+import com.example.ToDoList.model.dto.UserRegisterDto;
 import com.example.ToDoList.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -12,23 +12,23 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/user")
-public class UserController extends AbstractController<UserAuthenticationEntity, UserDto, UserService>{
+public class UserController extends AbstractController<UserAuthenticationEntity, UserRegisterDto, UserService>{
 
 
     @PostMapping("/register")
-    public void register(@RequestBody @Valid UserDto userDto){
-        service.create(mapper.dtoToEntity(userDto));
+    public void register(@RequestBody @Valid UserRegisterDto userRegisterDto){
+        service.create(mapper.dtoToEntity(userRegisterDto));
     }
 
 
     @GetMapping("/get")
-    public UserDto read(@RequestParam("name") String name) throws Exception {
+    public UserRegisterDto read(@RequestParam("name") String name) throws Exception {
         return mapper.entityToDto(service.findByName(name).get());
     }
 
     @PutMapping("/update")
-    public void update(@RequestBody UserDto userDto){
-        service.update(mapper.dtoToEntity(userDto));
+    public void update(@RequestBody UserRegisterDto userRegisterDto){
+        service.update(mapper.dtoToEntity(userRegisterDto));
     }
 
 
@@ -36,6 +36,10 @@ public class UserController extends AbstractController<UserAuthenticationEntity,
     public void delete(@PathVariable("id") Integer id){
         service.delete(id);
     }
+
+
+//    @GetMapping("/login")
+//    public String login(@RequestBody )
 
 
 
