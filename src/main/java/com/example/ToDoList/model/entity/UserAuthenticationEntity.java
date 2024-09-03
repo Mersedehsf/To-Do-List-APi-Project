@@ -1,4 +1,4 @@
-package com.example.ToDoList.model;
+package com.example.ToDoList.model.entity;
 
 
 import com.example.ToDoList.model.entity.AbstractEntity;

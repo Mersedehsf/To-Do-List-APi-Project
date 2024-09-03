@@ -1,7 +1,7 @@
 package com.example.ToDoList.service;
 
 import com.example.ToDoList.config.ApplicationConfig;
-import com.example.ToDoList.model.UserAuthenticationEntity;
+import com.example.ToDoList.model.entity.UserAuthenticationEntity;
 import com.example.ToDoList.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +24,10 @@ public class UserService extends AbstractService<UserAuthenticationEntity, UserR
             throw new RuntimeException(e);
         }
     }
+
+
+
+
 
 
 
