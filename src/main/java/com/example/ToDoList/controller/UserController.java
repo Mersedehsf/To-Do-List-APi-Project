@@ -38,8 +38,10 @@ public class UserController extends AbstractController<UserAuthenticationEntity,
     }
 
 
-//    @GetMapping("/login")
-//    public String login(@RequestBody )
+    @GetMapping("/login")
+    public String login(@RequestBody UserRegisterDto userRegisterDto){
+        return service.login(mapper.dtoToEntity(userRegisterDto));
+    }
 
 
 
