@@ -5,14 +5,16 @@ import com.example.ToDoList.config.jwt.JwtService;
 import com.example.ToDoList.model.entity.UserAuthenticationEntity;
 import com.example.ToDoList.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.Optional;
 
 @Service
-public class UserService extends AbstractService<UserAuthenticationEntity, UserRepository>{
+public class UserService extends AbstractService<UserAuthenticationEntity, UserRepository> implements UserDetailsService{
 
     @Autowired
     JwtService jwtService;
@@ -66,7 +68,7 @@ public class UserService extends AbstractService<UserAuthenticationEntity, UserR
     }
 
     public String login(UserAuthenticationEntity userAuthenticationEntity) throws Exception {
-        UserAuthenticationEntity foundedUser = findByEmail(userAuthenticationEntity.getName()).get();
+        UserAuthenticationEntity foundedUser = findByEmail(userAuthenticationEntity.getEmail()).get();
         if (ApplicationConfig.passwordEncoder().matches(userAuthenticationEntity.getPassword(), foundedUser.getPassword())) {
             String token = jwtService.generateToken(userAuthenticationEntity);
             return token;
@@ -74,5 +76,10 @@ public class UserService extends AbstractService<UserAuthenticationEntity, UserR
         else {
             throw new Exception("User is not authenticated");
         }
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return findByEmail(email).orElse(null);
     }
 }

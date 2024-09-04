@@ -6,6 +6,7 @@ import com.example.ToDoList.model.entity.UserAuthenticationEntity;
 import com.example.ToDoList.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -22,6 +23,7 @@ public class UserController extends AbstractController<UserAuthenticationEntity,
 
 
     @GetMapping("/get")
+    @PreAuthorize("hasRole('ADMIN')")
     public UserDto read(@RequestParam("name") String name) throws Exception {
         return mapper.entityToDto(service.findByName(name).get());
     }
@@ -38,8 +40,10 @@ public class UserController extends AbstractController<UserAuthenticationEntity,
     }
 
 
-//    @GetMapping("/login")
-//    public String login(@RequestBody )
+    @GetMapping("/login")
+    public String login(@RequestBody UserDto userDto) throws Exception {
+       return service.login(mapper.dtoToEntity(userDto));
+    }
 
 
 

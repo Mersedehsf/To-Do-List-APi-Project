@@ -1,5 +1,7 @@
 package com.example.ToDoList.config.jwt;
 
+import com.example.ToDoList.model.entity.UserAuthenticationEntity;
+import com.example.ToDoList.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,6 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
+import java.util.Optional;
 
 
 @Configuration
@@ -26,6 +29,9 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Autowired
     UserDetailsService userDetailsService;
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     HandlerExceptionResolver handlerExceptionResolver;
@@ -41,15 +47,15 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         try {
-            final String jwt = authHeader.substring(7);
-            final String userEmail = jwtService.extractUsername(jwt);
+            final String pureToken = authHeader.substring(7);
+            final String userEmail = jwtService.extractUsername(pureToken);
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
             if (userEmail != null && authentication == null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
 
-                if (jwtService.isTokenValid(jwt, userDetails)) {
+                if (jwtService.isTokenValid(pureToken, userDetails)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,
                             null,
