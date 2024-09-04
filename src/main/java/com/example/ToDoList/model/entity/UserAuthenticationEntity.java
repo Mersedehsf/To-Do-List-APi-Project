@@ -2,9 +2,8 @@ package com.example.ToDoList.model.entity;
 
 
 import com.example.ToDoList.model.entity.AbstractEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import com.example.ToDoList.model.enums.Role;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -32,6 +31,10 @@ public class UserAuthenticationEntity extends AbstractEntity implements UserDeta
 
     @Column(name = "password")
     private String password;
+
+    @Column(name = "role")
+    @Enumerated(value = EnumType.STRING)
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

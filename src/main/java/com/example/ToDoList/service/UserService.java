@@ -51,6 +51,9 @@ public class UserService extends AbstractService<UserAuthenticationEntity, UserR
             if(Objects.nonNull(userAuthenticationEntity.getName())){
                 foundedUser.setName(userAuthenticationEntity.getName());
             }
+            if(Objects.nonNull(userAuthenticationEntity.getRole())){
+                foundedUser.setRole(userAuthenticationEntity.getRole());
+            }
             if (Objects.nonNull(userAuthenticationEntity.getPassword())){
                 foundedUser.setPassword(ApplicationConfig.passwordEncoder().encode(userAuthenticationEntity.getPassword()));
             }
