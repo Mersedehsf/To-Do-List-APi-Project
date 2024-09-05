@@ -1,6 +1,7 @@
 package com.example.ToDoList.config;
 
 
+import com.example.ToDoList.config.jwt.CustomAccessDeniedHandler;
 import com.example.ToDoList.config.jwt.JwtAuthenticationEntryPoint;
 import com.example.ToDoList.config.jwt.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-
 public class SecurityConfig {
 
     @Autowired
@@ -27,7 +27,8 @@ public class SecurityConfig {
     @Autowired
     JwtAuthenticationEntryPoint unauthorizedHandler;
 
-
+    @Autowired
+    CustomAccessDeniedHandler accessDeniedHandler;
 
 
     @Bean
@@ -41,9 +42,10 @@ public class SecurityConfig {
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
-//                .exceptionHandling()
-//                .authenticationEntryPoint(unauthorizedHandler)
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(unauthorizedHandler)
+                .accessDeniedHandler(accessDeniedHandler)
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
