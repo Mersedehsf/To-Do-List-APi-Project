@@ -2,8 +2,6 @@ package com.example.ToDoList.config.jwt;
 
 import com.example.ToDoList.model.entity.UserAuthenticationEntity;
 import com.example.ToDoList.service.UserService;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,9 +19,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
-import java.nio.file.AccessDeniedException;
-import java.security.SignatureException;
-import java.util.Optional;
 
 
 @Configuration
@@ -41,7 +36,10 @@ public class JwtFilter extends OncePerRequestFilter {
     @Autowired
     HandlerExceptionResolver handlerExceptionResolver;
 
-    // todo a better way to handle all jwt exceptiond
+
+    public static UserAuthenticationEntity loggedInUser ;
+
+    //todo a better way to handle all jwt exceptions like switch project
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
@@ -62,6 +60,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
                 if (userEmail != null && authentication == null) {
                     UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+                    loggedInUser = (UserAuthenticationEntity) userDetails;
+
 
                     if (jwtService.isTokenValid(pureToken, userDetails)) {
                         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
@@ -84,5 +84,13 @@ public class JwtFilter extends OncePerRequestFilter {
             handlerExceptionResolver.resolveException(request, response, null, exception);
         }
 
+    }
+
+    public UserAuthenticationEntity getLoggedInUser() {
+        return loggedInUser;
+    }
+
+    public void setLoggedInUser(UserAuthenticationEntity loggedInUser) {
+        this.loggedInUser = loggedInUser;
     }
 }

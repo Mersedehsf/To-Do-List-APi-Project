@@ -39,6 +39,9 @@ public class UserAuthenticationEntity extends AbstractEntity implements UserDeta
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
+
+    //todo check this method with the one in switch
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + role));
