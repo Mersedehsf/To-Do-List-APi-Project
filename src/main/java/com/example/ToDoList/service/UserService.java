@@ -28,19 +28,24 @@ public class UserService extends AbstractService<UserAuthenticationEntity, UserR
         repository.save(userAuthenticationEntity);
     }
 
-    public Optional<UserAuthenticationEntity> findByName(String name) throws Exception {
-        try {
-            return Optional.ofNullable(repository.findByName(name));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+    public UserAuthenticationEntity findByName(String name) throws Exception {
+        UserAuthenticationEntity userAuthenticationEntity = repository.findByName(name);
+        if (Objects.nonNull(userAuthenticationEntity)){
+            return userAuthenticationEntity;
         }
+        else {
+            throw new ServiceException("user with this name was not found");
+        }
+
     }
 
-    public Optional<UserAuthenticationEntity> findByEmail(String email){
-        try {
-            return Optional.ofNullable(repository.findByEmail(email));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+    public UserAuthenticationEntity findByEmail(String email){
+        UserAuthenticationEntity userAuthenticationEntity = repository.findByEmail(email);
+        if(Objects.nonNull(userAuthenticationEntity)){
+            return userAuthenticationEntity;
+        }
+        else {
+            throw new ServiceException("user with this email was not found");
         }
 
     }
@@ -88,7 +93,7 @@ public class UserService extends AbstractService<UserAuthenticationEntity, UserR
     }
 
     public String login(UserAuthenticationEntity userAuthenticationEntity) throws Exception {
-        UserAuthenticationEntity foundedUser = findByEmail(userAuthenticationEntity.getEmail()).get();
+        UserAuthenticationEntity foundedUser = findByEmail(userAuthenticationEntity.getEmail());
         if (ApplicationConfig.passwordEncoder().matches(userAuthenticationEntity.getPassword(), foundedUser.getPassword())) {
             String token = jwtService.generateToken(userAuthenticationEntity);
             return token;
@@ -100,6 +105,12 @@ public class UserService extends AbstractService<UserAuthenticationEntity, UserR
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return findByEmail(email).orElse(null);
+        UserDetails userDetails =  findByEmail(email);
+        if (Objects.nonNull(userDetails)){
+            return userDetails;
+        }
+        else {
+            throw new ServiceException("userDetails with this username(email) does not exists.");
+        }
     }
 }

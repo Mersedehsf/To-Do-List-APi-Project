@@ -3,6 +3,7 @@ package com.example.ToDoList.model.entity;
 
 import com.example.ToDoList.model.entity.AbstractEntity;
 import com.example.ToDoList.model.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
@@ -38,9 +39,6 @@ public class UserAuthenticationEntity extends AbstractEntity implements UserDeta
     @Column(name = "role")
     @Enumerated(value = EnumType.STRING)
     private Role role;
-
-
-    //todo check this method with the one in switch
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

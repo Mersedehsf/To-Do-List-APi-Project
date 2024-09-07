@@ -25,7 +25,7 @@ public class UserController extends AbstractController<UserAuthenticationEntity,
     @GetMapping("/get")
     @PreAuthorize("hasRole('ADMIN')")
     public UserDto read(@RequestParam("name") String name) throws Exception {
-        return mapper.entityToDto(service.findByName(name).get());
+        return mapper.entityToDto(service.findByName(name));
     }
 
     @PutMapping("/update")
