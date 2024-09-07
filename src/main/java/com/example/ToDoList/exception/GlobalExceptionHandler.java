@@ -2,19 +2,17 @@ package com.example.ToDoList.exception;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
-import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.validation.FieldError;
 
-import java.nio.file.AccessDeniedException;
 import java.security.SignatureException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
@@ -40,6 +38,12 @@ public class GlobalExceptionHandler {
         errorResponse.put("errors", errors);
         logger.error("errors:" , errors);
         return errorResponse;
+    }
+
+    @ExceptionHandler(ServiceException.class)
+    public ResponseEntity<ErrorMessage> handleServiceException(ServiceException ex) {
+        logger.error("Service exception: {}", ex.getMessage());
+        return new ResponseEntity<>(new ErrorMessage(ex.getMessage(), 403), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
