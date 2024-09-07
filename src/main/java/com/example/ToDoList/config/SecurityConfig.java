@@ -37,6 +37,8 @@ public class SecurityConfig {
                 .disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/user/get/**").hasAnyRole("ADMIN")
+                .requestMatchers("/user/update/**").hasAnyRole("ADMIN","USER")
+                .requestMatchers("/user/physicalDelete/**").hasAnyRole("ADMIN","USER")
                 .requestMatchers("/user/**").permitAll()
                 .anyRequest().authenticated()
                 .and()

@@ -1,8 +1,11 @@
 package com.example.ToDoList.service;
 
 import com.example.ToDoList.config.ApplicationConfig;
+import com.example.ToDoList.config.jwt.JwtFilter;
 import com.example.ToDoList.config.jwt.JwtService;
+import com.example.ToDoList.exception.ServiceException;
 import com.example.ToDoList.model.entity.UserAuthenticationEntity;
+import com.example.ToDoList.model.enums.Role;
 import com.example.ToDoList.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -44,9 +47,11 @@ public class UserService extends AbstractService<UserAuthenticationEntity, UserR
 
     @Override
     public void update(UserAuthenticationEntity userAuthenticationEntity) {
-        Optional<UserAuthenticationEntity> user =  repository.findById(userAuthenticationEntity.getId());
-        if (user.isPresent()){
-            UserAuthenticationEntity foundedUser = user.get();
+
+        UserAuthenticationEntity foundedUser = repository.findById(userAuthenticationEntity.getId())
+                .orElseThrow(() -> new ServiceException("User not found"));
+
+        if ((JwtFilter.loggedInUser.getRole().equals(Role.ADMIN) || JwtFilter.loggedInUser.getId().equals(foundedUser.getId())) ){
             if (Objects.nonNull(userAuthenticationEntity.getEmail())){
                 foundedUser.setEmail(userAuthenticationEntity.getEmail());
             }
@@ -63,7 +68,22 @@ public class UserService extends AbstractService<UserAuthenticationEntity, UserR
 
         }
 
+        else {
+            throw new ServiceException("forbidden");
+        }
 
+    }
+
+    @Override
+    public void delete(Integer id) {
+        UserAuthenticationEntity foundedUser = repository.findById(id)
+                .orElseThrow(() -> new ServiceException("User not found"));
+        if (JwtFilter.loggedInUser.getRole().equals(Role.ADMIN) || JwtFilter.loggedInUser.getId().equals(foundedUser.getId())) {
+            repository.delete(foundedUser);
+        }
+        else {
+            throw new ServiceException("forbidden");
+        }
 
     }
 

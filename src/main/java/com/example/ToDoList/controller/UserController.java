@@ -29,12 +29,14 @@ public class UserController extends AbstractController<UserAuthenticationEntity,
     }
 
     @PutMapping("/update")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public void update(@RequestBody UserDto userRegisterDto){
         service.update(mapper.dtoToEntity(userRegisterDto));
     }
 
 
     @DeleteMapping("/physicalDelete/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public void delete(@PathVariable("id") Integer id){
         service.delete(id);
     }
