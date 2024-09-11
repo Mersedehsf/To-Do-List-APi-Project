@@ -10,9 +10,6 @@ import java.util.Optional;
 
 public abstract class AbstractService<E extends AbstractEntity, R extends JpaRepository<E, Integer>> {
 
-
-    //todo handle service exception (extend runtime exceptions)
-
     @Autowired
     protected R repository;
 

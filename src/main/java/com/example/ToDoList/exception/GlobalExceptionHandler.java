@@ -52,7 +52,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new ErrorMessage("This User With Same Email Address Already Exists.",403), HttpStatus.FORBIDDEN);
     }
 
-
     @ExceptionHandler(ExpiredJwtException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ResponseEntity<ErrorMessage> expiredJwt(ExpiredJwtException error) {
@@ -63,8 +62,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(SignatureException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResponseEntity<ErrorMessage> invalidSignature(SignatureException error) {
-        logger.error("Invalid JWT signature.");
-        return new ResponseEntity<>(new ErrorMessage("Invalid JWT signature.", 401), HttpStatus.UNAUTHORIZED);
+        logger.error("Unauthorized");
+        return new ResponseEntity<>(new ErrorMessage("Unauthorized", 401), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(MalformedJwtException.class)
@@ -73,7 +72,6 @@ public class GlobalExceptionHandler {
         logger.error("Malformed JWT token.");
         return new ResponseEntity<>(new ErrorMessage("Malformed JWT token.", 401), HttpStatus.UNAUTHORIZED);
     }
-
 
 
 }

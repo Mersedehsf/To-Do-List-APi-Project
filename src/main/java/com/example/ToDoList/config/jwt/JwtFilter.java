@@ -2,6 +2,7 @@ package com.example.ToDoList.config.jwt;
 
 import com.example.ToDoList.model.entity.UserAuthenticationEntity;
 import com.example.ToDoList.service.UserService;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -39,7 +40,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
     public static UserAuthenticationEntity loggedInUser ;
 
-    //todo a better way to handle all jwt exceptions like switch project
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
@@ -52,35 +52,33 @@ public class JwtFilter extends OncePerRequestFilter {
 
         try {
             final String pureToken = authHeader.substring(7);
-            try {
-                final String userEmail = jwtService.extractUsername(pureToken);
+            final String userEmail = jwtService.extractUsername(pureToken);
 
 
-                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-                if (userEmail != null && authentication == null) {
-                    UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-                    loggedInUser = (UserAuthenticationEntity) userDetails;
+            if (userEmail != null && authentication == null) {
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+                loggedInUser = (UserAuthenticationEntity) userDetails;
 
 
-                    if (jwtService.isTokenValid(pureToken, userDetails)) {
-                        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                                userDetails,
-                                null,
-                                userDetails.getAuthorities()
-                        );
+                if (jwtService.isTokenValid(pureToken, userDetails)) {
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                    );
 
-                        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                        SecurityContextHolder.getContext().setAuthentication(authToken);
-                    }
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
+            }
 
-                filterChain.doFilter(request, response);
-            }
-            catch (MalformedJwtException e) {
-                throw new ServletException(e);
-            }
-            } catch (Exception exception) {
+            filterChain.doFilter(request, response);
+
+        } catch (JwtException exception) {
+            handlerExceptionResolver.resolveException(request, response, null, exception);
+        } catch (Exception exception) {
             handlerExceptionResolver.resolveException(request, response, null, exception);
         }
 

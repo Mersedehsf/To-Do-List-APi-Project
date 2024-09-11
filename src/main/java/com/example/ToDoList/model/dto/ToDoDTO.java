@@ -1,6 +1,7 @@
 package com.example.ToDoList.model.dto;
 
 
+import com.example.ToDoList.model.entity.UserAuthenticationEntity;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;

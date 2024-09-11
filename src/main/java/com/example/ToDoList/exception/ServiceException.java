@@ -5,9 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ServiceException extends RuntimeException{
 
 
-    //todo not sure if this is correct
-
-
     public ServiceException() {
     }
 
