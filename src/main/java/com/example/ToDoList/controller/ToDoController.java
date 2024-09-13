@@ -5,10 +5,7 @@ import com.example.ToDoList.model.entity.ToDoEntity;
 import com.example.ToDoList.service.ToDoService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @AllArgsConstructor
@@ -19,6 +16,21 @@ public class ToDoController extends AbstractController<ToDoEntity, ToDoDTO, ToDo
     @PostMapping("/create")
     public void register(@RequestBody @Valid ToDoDTO toDoDTO){
         service.create(mapper.dtoToEntity(toDoDTO));
+    }
+
+    @GetMapping("/get")
+    public ToDoDTO get(@RequestParam String title){
+        return mapper.entityToDto(service.getByTitle(title));
+    }
+
+    @PutMapping("/update")
+    public void update(@RequestBody ToDoDTO toDoDTO){
+        service.update(mapper.dtoToEntity(toDoDTO));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void delete(@PathVariable Integer id){
+        service.delete(id);
     }
 
 
