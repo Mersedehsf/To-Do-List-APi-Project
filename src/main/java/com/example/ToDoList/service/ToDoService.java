@@ -1,16 +1,15 @@
 package com.example.ToDoList.service;
 
-import com.example.ToDoList.config.ApplicationConfig;
 import com.example.ToDoList.config.jwt.JwtFilter;
 import com.example.ToDoList.exception.ServiceException;
 import com.example.ToDoList.model.entity.ToDoEntity;
 import com.example.ToDoList.model.entity.UserAuthenticationEntity;
-import com.example.ToDoList.model.enums.Role;
 import com.example.ToDoList.repository.ToDoRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
-import java.util.function.Predicate;
 
 
 @Service
@@ -71,6 +70,11 @@ public class ToDoService extends AbstractService<ToDoEntity, ToDoRepository> {
             throw new ServiceException("A todo with this title was not found");
         }
 
+    }
 
+    public Page<ToDoEntity> getAll(int page, int size) {
+        UserAuthenticationEntity loggedInUser = JwtFilter.loggedInUser;
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return repository.findAllByUserAuthenticationEntityId(loggedInUser.getId(), pageRequest);
     }
 }
