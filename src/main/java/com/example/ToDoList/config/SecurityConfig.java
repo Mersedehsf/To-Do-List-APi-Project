@@ -40,6 +40,7 @@ public class SecurityConfig {
                 .requestMatchers("/user/update/**").hasAnyRole("ADMIN","USER")
                 .requestMatchers("/user/physicalDelete/**").hasAnyRole("ADMIN","USER")
                 .requestMatchers("/user/**").permitAll()
+                .requestMatchers("/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
