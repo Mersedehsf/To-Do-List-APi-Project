@@ -30,7 +30,8 @@ public class SecurityConfig {
     @Autowired
     CustomAccessDeniedHandler accessDeniedHandler;
 
-
+// todo : add jwt token inbox for swagger
+    // todo : adding a proper name for swagger
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf()
