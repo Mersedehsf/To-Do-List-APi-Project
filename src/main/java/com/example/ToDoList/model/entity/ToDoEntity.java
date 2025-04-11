@@ -26,7 +26,13 @@ public class ToDoEntity extends AbstractEntity{
     @JoinColumn(name = "user_id")
     private UserAuthenticationEntity userAuthenticationEntity;
 
+    @Column(name = "completed",nullable = false)
+    private Integer completed = 0;
 
 
-
+    public ToDoEntity(String title, String description, UserAuthenticationEntity loggedInUser) {
+        this.title = title;
+        this.description = description;
+        this.userAuthenticationEntity = loggedInUser;
+    }
 }

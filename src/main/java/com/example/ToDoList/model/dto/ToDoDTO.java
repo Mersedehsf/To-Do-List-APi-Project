@@ -4,17 +4,19 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.parameters.P;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ToDoDTO extends BaseDto{
 
-
     @NotNull(message = "Title cannot be null")
     private String title;
 
     private String description;
+
+    private Integer completed;
 
 
 }

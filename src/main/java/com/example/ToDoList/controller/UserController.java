@@ -4,8 +4,10 @@ package com.example.ToDoList.controller;
 import com.example.ToDoList.model.dto.UserDto;
 import com.example.ToDoList.model.entity.UserAuthenticationEntity;
 import com.example.ToDoList.service.UserService;
+import com.example.ToDoList.service.rabbitmq.QueueSetupService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +22,6 @@ public class UserController extends AbstractController<UserAuthenticationEntity,
     public void register(@RequestBody @Valid UserDto userRegisterDto){
         service.create(mapper.dtoToEntity(userRegisterDto));
     }
-
 
     @GetMapping("/get")
     @PreAuthorize("hasRole('ADMIN')")

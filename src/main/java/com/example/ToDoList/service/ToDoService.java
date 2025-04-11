@@ -5,6 +5,8 @@ import com.example.ToDoList.exception.ServiceException;
 import com.example.ToDoList.model.entity.ToDoEntity;
 import com.example.ToDoList.model.entity.UserAuthenticationEntity;
 import com.example.ToDoList.repository.ToDoRepository;
+import com.example.ToDoList.service.rabbitmq.TodoProducer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -15,16 +17,24 @@ import java.util.Objects;
 @Service
 public class ToDoService extends AbstractService<ToDoEntity, ToDoRepository> {
 
+    @Autowired
+    private TodoProducer todoProducer;
 
     @Override
     public void create(ToDoEntity toDoEntity) {
         try {
             UserAuthenticationEntity loggedInUser = JwtFilter.loggedInUser;
+
+            todoProducer.sendTodoMessage(loggedInUser.getId(), toDoEntity.getTitle());
+            Thread.sleep(8000);
+
             ToDoEntity newToDo = new ToDoEntity(toDoEntity.getTitle(), toDoEntity.getDescription(), loggedInUser);
             repository.save(newToDo);
 
         } catch (ServiceException e) {
             throw new ServiceException("logged in user not found");
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
 
     }
@@ -40,6 +50,7 @@ public class ToDoService extends AbstractService<ToDoEntity, ToDoRepository> {
             if (Objects.nonNull(toDoEntity.getTitle())){
                 foundedToDo.setTitle(toDoEntity.getTitle());
             }
+            foundedToDo.setCompleted(toDoEntity.getCompleted());
             repository.save(foundedToDo);
         }
         else {

@@ -1,0 +1,1 @@
+INSERT INTO user_authentication(name,email) values ('sina','sina@gmail.com');

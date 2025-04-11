@@ -7,7 +7,9 @@ import com.example.ToDoList.exception.ServiceException;
 import com.example.ToDoList.model.entity.UserAuthenticationEntity;
 import com.example.ToDoList.model.enums.Role;
 import com.example.ToDoList.repository.UserRepository;
+import com.example.ToDoList.service.rabbitmq.QueueSetupService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,10 +24,14 @@ public class UserService extends AbstractService<UserAuthenticationEntity, UserR
     @Autowired
     JwtService jwtService;
 
+    @Autowired
+    private QueueSetupService queueSetupService;
+
     @Override
     public void create(UserAuthenticationEntity userAuthenticationEntity){
         userAuthenticationEntity.setPassword(ApplicationConfig.passwordEncoder().encode(userAuthenticationEntity.getPassword()));
-        repository.save(userAuthenticationEntity);
+        UserAuthenticationEntity savedUser = repository.save(userAuthenticationEntity);
+        queueSetupService.setupQueueForUser(savedUser.getId());
     }
 
     public UserAuthenticationEntity findByName(String name) throws Exception {
